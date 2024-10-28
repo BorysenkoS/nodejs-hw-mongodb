@@ -8,8 +8,19 @@ import {
   updateContact,
 } from '../services/contacts.js';
 
-export async function getContactsController(req, res, next) {
-  const contacts = await getAllContacts();
+import { parsePaginationParams } from '../utils/parsePaginationParams.js';
+import { parseSortParams } from '../utils/parseSortParams.js';
+
+export async function getContactsController(req, res) {
+  const { page, perPage } = parsePaginationParams(req.query);
+  console.log({ page, perPage });
+
+  parseSortParams(req.query);
+
+  const contacts = await getAllContacts({
+    page,
+    perPage,
+  });
   res.json({
     status: 200,
     message: 'Successfully found contacts!',
@@ -72,5 +83,19 @@ export const patchContactController = async (req, res) => {
     status: 200,
     message: `Successfully patched a contact!`,
     data: result,
+  });
+};
+
+export const getStudentsController = async (req, res) => {
+  const { page, perPage } = parsePaginationParams(req.query);
+  const contacts = await getAllContacts({
+    page,
+    perPage,
+  });
+
+  res.json({
+    status: 200,
+    message: 'Successfully found students!',
+    data: contacts,
   });
 };

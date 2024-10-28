@@ -25,8 +25,8 @@ router.get('/:id', isValidId, ctrlWrapper(getContactByIDController));
 
 router.post(
   '/',
-  validateBody(createContactSchema),
   jsonParser,
+  validateBody(createContactSchema),
   ctrlWrapper(createContactController),
 );
 
