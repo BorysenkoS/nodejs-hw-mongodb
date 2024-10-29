@@ -15,11 +15,13 @@ export async function getContactsController(req, res) {
   const { page, perPage } = parsePaginationParams(req.query);
   console.log({ page, perPage });
 
-  parseSortParams(req.query);
+  const { sortBy, sortOrder } = parseSortParams(req.query);
 
   const contacts = await getAllContacts({
     page,
     perPage,
+    sortBy,
+    sortOrder,
   });
   res.json({
     status: 200,
