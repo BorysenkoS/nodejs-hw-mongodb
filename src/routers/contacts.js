@@ -34,8 +34,8 @@ router.delete('/:id', isValidId, ctrlWrapper(deleteContactController));
 
 router.patch(
   '/:id',
-  validateBody(updateContactSchema),
   jsonParser,
+  validateBody(updateContactSchema),
   ctrlWrapper(patchContactController),
 );
 

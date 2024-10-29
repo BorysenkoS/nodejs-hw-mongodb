@@ -50,7 +50,7 @@ export const createContactController = async (req, res) => {
     name: req.body.name,
     phoneNumber: req.body.phoneNumber,
     email: req.body.email,
-    isFavorite: req.body.isFavorite,
+    isFavourite: req.body.isFavorite,
     contactType: req.body.contactType,
   };
 
@@ -85,19 +85,5 @@ export const patchContactController = async (req, res) => {
     status: 200,
     message: `Successfully patched a contact!`,
     data: result,
-  });
-};
-
-export const getStudentsController = async (req, res) => {
-  const { page, perPage } = parsePaginationParams(req.query);
-  const contacts = await getAllContacts({
-    page,
-    perPage,
-  });
-
-  res.json({
-    status: 200,
-    message: 'Successfully found students!',
-    data: contacts,
   });
 };

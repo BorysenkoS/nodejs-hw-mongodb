@@ -20,7 +20,7 @@ export const createContactSchema = Joi.object({
       'any.required': 'phoneNumber is required',
     }),
   email: Joi.string().email(),
-  isFavorite: Joi.boolean(),
+  isFavourite: Joi.boolean(),
   contactType: Joi.string().valid('work', 'home', 'personal'),
 });
 
@@ -37,6 +37,6 @@ export const updateContactSchema = Joi.object({
     'string.max': 'PhoneNumber should have at most {#limit} characters',
   }),
   email: Joi.string().email(),
-  isFavorite: Joi.boolean(),
+  isFavourite: Joi.boolean(),
   contactType: Joi.string().valid('work', 'home', 'personal'),
 });
