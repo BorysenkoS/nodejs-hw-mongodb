@@ -4,7 +4,7 @@ import pinoHttp from 'pino-http';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { errorHandler } from './middlewares/errorHanler.js';
 
-import contactsRouters from './routers/contacts.js';
+import router from './routers/index.js';
 
 import { env } from './utils/env.js';
 
@@ -13,7 +13,7 @@ const PORT = Number(env('PORT', '3000'));
 const setupServer = () => {
   const app = express();
 
-  app.use('/contacts', contactsRouters);
+  app.use(router);
   app.use(cors());
   app.use(
     pinoHttp({
@@ -22,6 +22,7 @@ const setupServer = () => {
       },
     }),
   );
+
   app.use(notFoundHandler);
   app.use(errorHandler);
   app.listen(PORT, () => {
