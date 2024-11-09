@@ -10,6 +10,7 @@ import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 
 import { validateBody } from '../middlewares/validateBody.js';
 import { isValidId } from '../middlewares/isValidId.js';
+import { authenticate } from '../middlewares/authenticate.js';
 
 import {
   createContactSchema,
@@ -18,6 +19,10 @@ import {
 
 const router = express.Router();
 const jsonParser = express.json();
+
+router.use(authenticate);
+
+router.get('/', ctrlWrapper(getContactsController));
 
 router.get('/', ctrlWrapper(getContactsController));
 
