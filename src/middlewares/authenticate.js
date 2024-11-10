@@ -22,7 +22,7 @@ export const authenticate = async (req, res, next) => {
   const session = await SessionsCollection.findOne({ accessToken: token });
 
   if (!session) {
-    next(createHttpError(401, 'Session not found'));
+    next(createHttpError(401, 'Session not found successfully'));
     return;
   }
 
@@ -36,7 +36,7 @@ export const authenticate = async (req, res, next) => {
   const user = await UsersCollection.findById(session.userId);
 
   if (!user) {
-    next(createHttpError(401));
+    next(createHttpError(401, 'Session not found'));
     return;
   }
 
