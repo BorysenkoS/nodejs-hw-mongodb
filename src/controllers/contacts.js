@@ -10,6 +10,10 @@ import {
 
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
+import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
+
+import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
+import { env } from '../utils/env.js';
 
 export async function getContactsController(req, res) {
   const { page, perPage } = parsePaginationParams(req.query);
@@ -46,6 +50,11 @@ export async function getContactByIDController(req, res, next) {
 }
 
 export const createContactController = async (req, res) => {
+  const photo = req.file;
+  let photoUrl;
+  if (photo) {
+    photoUrl = await saveFileToUploadDir(photo);
+  }
   const contact = {
     name: req.body.name,
     phoneNumber: req.body.phoneNumber,
@@ -53,6 +62,7 @@ export const createContactController = async (req, res) => {
     isFavourite: req.body.isFavorite,
     contactType: req.body.contactType,
     userId: req.user.id,
+    photo: photoUrl,
   };
 
   const result = await createContact(contact);
@@ -75,19 +85,33 @@ export const deleteContactController = async (req, res) => {
   return res.status(204).end();
 };
 
-export const patchContactController = async (req, res) => {
+export const patchContactController = async (req, res, next) => {
   const { id } = req.params;
-  const userId = req.user.id;
+  const photo = req.file;
 
-  const result = await updateContact(id, req.body, userId);
+  let photoUrl;
 
-  if (result === null) {
-    throw createError(404, 'Contact not found');
+  if (photo) {
+    if (env('ENABLE_CLOUDINARY') === 'true') {
+      photoUrl = await saveFileToCloudinary(photo);
+    } else {
+      photoUrl = await saveFileToUploadDir(photo);
+    }
+  }
+
+  const result = await updateContact(id, {
+    ...req.body,
+    photo: photoUrl,
+  });
+
+  if (!result) {
+    next(createError(404, 'Contact not found'));
+    return;
   }
 
   res.json({
     status: 200,
     message: `Successfully patched a contact!`,
-    data: result,
+    data: result.contact,
   });
 };
