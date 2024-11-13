@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import Contact from '../db/contacts.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 
@@ -42,13 +43,22 @@ export const deleteContact = async (id, userId) => {
   return deleteContact;
 };
 
-export const updateContact = async (id, contact, userId) => {
+// export const updateContact = async (id, contact, userId) => {
+//   const updateContact = await Contact.findOneAndUpdate(
+//     { _id: id, userId },
+//     contact,
+//     {
+//       new: true,
+//     },
+//   );
+//   return updateContact;
+// };
+
+export const updateContact = async (id, userId, contact) => {
   const updateContact = await Contact.findOneAndUpdate(
     { _id: id, userId },
     contact,
-    {
-      new: true,
-    },
+    { new: true },
   );
   return updateContact;
 };
