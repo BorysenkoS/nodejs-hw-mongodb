@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import Contact from '../db/contacts.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 
